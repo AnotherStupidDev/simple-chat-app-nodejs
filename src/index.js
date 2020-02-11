@@ -33,6 +33,7 @@ io.on('connection', (socket) => {
             room: user.room,
             users: getUsersInRoom(user.room)
         })
+
         callback()
     })
 
@@ -43,6 +44,7 @@ io.on('connection', (socket) => {
         if (filter.isProfane(message)) {
             return callback('Profanity is not allowed')
         }
+        
         io.to(room).emit('message', generateMessage(username, message))
         callback()
     })
@@ -53,7 +55,7 @@ io.on('connection', (socket) => {
         callback()
     })
 
-    socket.on('disconnect', (message) => {
+    socket.on('disconnect', () => {
         const user = removeUser(socket.id)
 
         if (user) {
@@ -62,7 +64,6 @@ io.on('connection', (socket) => {
                 room: user.room,
                 users: getUsersInRoom(user.room)
             })
-        
         }
     })
 })
